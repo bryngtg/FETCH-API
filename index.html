@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1f2937;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-900 p-6">
+
+    <!-- Container -->
+    <div class="max-w-4xl w-full bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-3xl font-bold mb-6 text-center text-blue-700">Fetch Data from URL</h2>
+
+        <!-- Input Section -->
+        <div class="mb-6">
+            <label for="url" class="block text-lg font-semibold mb-2 text-blue-600">Enter URL:</label>
+            <input type="text" id="url" placeholder="https://jsonplaceholder.typicode.com/posts" 
+                   class="w-full px-4 py-3 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+        </div>
+
+        <!-- Button Section -->
+        <div class="text-center mb-6">
+            <button onclick="fetchData()" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                Fetch Data
+            </button>
+        </div>
+
+        <!-- Result Table Section -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto border-collapse border border-blue-300">
+                <thead class="bg-blue-100">
+                    <tr>
+                        <th class="py-3 px-4 border border-blue-300 font-semibold text-blue-700">ID</th>
+                        <th class="py-3 px-4 border border-blue-300 font-semibold text-blue-700">Title</th>
+                        <th class="py-3 px-4 border border-blue-300 font-semibold text-blue-700">Body</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTableBody" class="bg-white divide-y divide-blue-200">
+                    <!-- Data will be inserted here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function fetchData() {
+            const url = document.getElementById('url').value;
+            const tableBody = document.getElementById('resultTableBody');
+
+            // Clear previous data
+            tableBody.innerHTML = '';
+
+            // Fetch data from the given URL
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Populate table with fetched data
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.classList.add('hover:bg-blue-50');
+                        row.innerHTML = `
+                            <td class="py-3 px-4 border border-blue-300">${item.id}</td>
+                            <td class="py-3 px-4 border border-blue-300">${item.title}</td>
+                            <td class="py-3 px-4 border border-blue-300">${item.body}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+
+</body>
+</html>
